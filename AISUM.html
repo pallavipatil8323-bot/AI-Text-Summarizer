@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Text Summarizer</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <span>✦</span> SummarAI
+        </div>
+
+        <nav>
+            <a href="#">Home</a>
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <!-- Hero Section -->
+
+        <section class="hero">
+
+            <div class="badge">
+                AI Powered Text Summarizer
+            </div>
+
+            <p>
+                Paste your text or upload a document and let AI
+                generate a concise summary with important key points.
+            </p>
+
+        </section>
+
+        <section class="summarizer-container">
+
+            <!-- Input Card -->
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div>
+                        <h2>Input Text</h2>
+                        <p>Paste your content or upload a file</p>
+                    </div>
+
+                    <button class="clear-btn" onclick="clearText()">
+                        Clear
+                    </button>
+                </div>
+
+
+                <textarea
+                    id="inputText"
+                    placeholder="Paste your article, notes, document or any long text here..."
+                    oninput="updateWordCount()"
+                ></textarea>
+
+
+                <div class="input-bottom">
+
+                    <label class="upload-btn">
+                        📄 Upload File
+                        <input
+                            type="file"
+                            id="fileInput"
+                            accept=".txt"
+                            onchange="readFile()"
+                        >
+                    </label>
+
+                    <span id="wordCount">
+                        0 words
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Settings Card -->
+
+            <div class="settings-card">
+
+                <div>
+                    <h3>Summary Length</h3>
+
+                    <p>
+                        Choose how detailed your summary should be.
+                    </p>
+                </div>
+
+
+                <div class="length-control">
+
+                    <span>Short</span>
+
+                    <input
+                        type="range"
+                        id="summaryLength"
+                        min="20"
+                        max="80"
+                        value="50"
+                        oninput="updateLength()"
+                    >
+
+                    <span>Long</span>
+
+                </div>
+
+
+                <div class="length-value">
+                    <span id="lengthValue">50%</span>
+                </div>
+
+
+                <button
+                    class="generate-btn"
+                    onclick="generateSummary()"
+                >
+                    ✨ Generate Summary
+                </button>
+
+            </div>
+
+
+            <!-- Result -->
+
+            <div class="result-grid">
+
+                <!-- Summary -->
+
+                <div class="card result-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h2>AI Summary</h2>
+                            <p>Generated summary will appear here</p>
+                        </div>
+
+                        <button
+                            class="copy-btn"
+                            onclick="copySummary()"
+                        >
+                            📋 Copy
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="summary-content"
+                        id="summary"
+                    >
+                        <div class="empty-state">
+                            <div class="empty-icon">✦</div>
+
+                            <h3>No summary yet</h3>
+
+                            <p>
+                                Enter some text and click
+                                "Generate Summary".
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="stats">
+
+                        <div>
+                            <span>Original</span>
+                            <strong id="originalWords">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Summary</span>
+                            <strong id="summaryWords">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Reduction</span>
+                            <strong id="reduction">0%</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Key Points -->
+
+                <div class="card keypoints-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h2>🔑 Key Points</h2>
+
+                            <p>
+                                Important information extracted
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div id="keyPoints">
+
+                        <div class="empty-state">
+                            <div class="empty-icon">🔑</div>
+
+                            <h3>No key points</h3>
+
+                            <p>
+                                Generate a summary to see
+                                the important points.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Features -->
+
+        <section
+            class="features"
+            id="features"
+        >
+
+            <h2>Powerful Summarization Features</h2>
+
+            <p class="section-description">
+                Everything you need to understand long content faster.
+            </p>
+
+
+            <div class="feature-grid">
+
+                <div class="feature">
+                    <div class="feature-icon">📝</div>
+                    <h3>Smart Summaries</h3>
+                    <p>
+                        Convert lengthy content into concise,
+                        easy-to-read summaries.
+                    </p>
+                </div>
+
+
+                <div class="feature">
+                    <div class="feature-icon">🔑</div>
+                    <h3>Key Points</h3>
+                    <p>
+                        Quickly identify the most important
+                        information from your text.
+                    </p>
+                </div>
+
+
+                <div class="feature">
+                    <div class="feature-icon">🎚️</div>
+                    <h3>Adjustable Length</h3>
+                    <p>
+                        Control how short or detailed your
+                        generated summary should be.
+                    </p>
+                </div>
+
+
+                <div class="feature">
+                    <div class="feature-icon">📄</div>
+                    <h3>File Support</h3>
+                    <p>
+                        Upload text documents and summarize
+                        their contents instantly.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer id="about">
+
+        <div class="logo">
+            <span>✦</span> SummarAI
+        </div>
+
+        <p>
+            AI-powered text summarization made simple.
+        </p>
+
+        <p class="copyright">
+            © 2026 SummarAI. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        const input = document.getElementById("inputText");
+
+
+        // Word Counter
+
+        function updateWordCount() {
+
+            const text = input.value.trim();
+
+            const words = text
+                ? text.split(/\s+/).length
+                : 0;
+
+            document.getElementById("wordCount").innerText =
+                words + " words";
+        }
+
+
+        // Summary Length
+
+        function updateLength() {
+
+            const value =
+                document.getElementById("summaryLength").value;
+
+            document.getElementById("lengthValue").innerText =
+                value + "%";
+        }
+
+
+        // Read File
+
+        function readFile() {
+
+            const file =
+                document.getElementById("fileInput").files[0];
+
+            if (!file) return;
+
+
+            const reader = new FileReader();
+
+
+            reader.onload = function(event) {
+
+                input.value = event.target.result;
+
+                updateWordCount();
+
+            };
+
+
+            reader.readAsText(file);
+        }
+
+
+        // Generate Summary
+
+        function generateSummary() {
+
+            const text = input.value.trim();
+
+            if (!text) {
+
+                alert("Please enter some text first.");
+
+                return;
+            }
+
+
+            const length =
+                parseInt(
+                    document.getElementById("summaryLength").value
+                );
+
+
+            const sentences =
+                text.match(/[^.!?]+[.!?]+/g) || [text];
+
+
+            /*
+                Simple extractive summarization.
+
+                Sentences are scored based on
+                frequently occurring words.
+            */
+
+
+            const words =
+                text.toLowerCase()
+                    .replace(/[^\w\s]/g, "")
+                    .split(/\s+/);
+
+
+            const frequency = {};
+
+
+            words.forEach(word => {
+
+                if (
+                    word.length > 3 &&
+                    ![
+                        "this",
+                        "that",
+                        "with",
+                        "from",
+                        "have",
+                        "will",
+                        "they",
+                        "which",
+                        "their",
+                        "about",
+                        "there",
+                        "would",
+                        "could",
+                        "should"
+                    ].includes(word)
+                ) {
+
+                    frequency[word] =
+                        (frequency[word] || 0) + 1;
+                }
+
+            });
+
+
+            const scoredSentences =
+                sentences.map((sentence, index) => {
+
+                    const sentenceWords =
+                        sentence.toLowerCase()
+                            .replace(/[^\w\s]/g, "")
+                            .split(/\s+/);
+
+
+                    let score = 0;
+
+
+                    sentenceWords.forEach(word => {
+
+                        if (frequency[word]) {
+
+                            score += frequency[word];
+
+                        }
+
+                    });
+
+
+                    return {
+                        sentence,
+                        score,
+                        index
+                    };
+
+                });
+
+
+            scoredSentences.sort(
+                (a, b) => b.score - a.score
+            );
+
+
+            const numberOfSentences =
+                Math.max(
+                    1,
+                    Math.ceil(
+                        sentences.length * (length / 100)
+                    )
+                );
+
+
+            const selected =
+                scoredSentences
+                    .slice(0, numberOfSentences)
+                    .sort((a, b) => a.index - b.index);
+
+
+            const summaryText =
+                selected
+                    .map(item => item.sentence.trim())
+                    .join(" ");
+
+
+            document.getElementById("summary").innerText =
+                summaryText;
+
+
+            // Stats
+
+            const originalWords =
+                text.split(/\s+/).length;
+
+
+            const summaryWordCount =
+                summaryText.split(/\s+/).length;
+
+
+            const reduction =
+                Math.round(
+                    (1 -
+                        summaryWordCount /
+                        originalWords
+                    ) * 100
+                );
+
+
+            document.getElementById("originalWords")
+                .innerText = originalWords;
+
+
+            document.getElementById("summaryWords")
+                .innerText = summaryWordCount;
+
+
+            document.getElementById("reduction")
+                .innerText =
+                Math.max(0, reduction) + "%";
+
+
+            // Key Points
+
+            generateKeyPoints(selected);
+
+        }
+
+
+        // Key Points
+
+        function generateKeyPoints(sentences) {
+
+            const container =
+                document.getElementById("keyPoints");
+
+
+            container.innerHTML = "";
+
+
+            sentences
+                .slice(0, 5)
+                .forEach((item, index) => {
+
+                    const point =
+                        document.createElement("div");
+
+                    point.className = "key-point";
+
+
+                    point.innerHTML = `
+
+                        <div class="point-number">
+                            ${index + 1}
+                        </div>
+
+                        <p>
+                            ${item.sentence.trim()}
+                        </p>
+
+                    `;
+
+
+                    container.appendChild(point);
+
+                });
+
+        }
+
+
+        // Copy Summary
+
+        function copySummary() {
+
+            const summary =
+                document.getElementById("summary").innerText;
+
+
+            if (
+                !summary ||
+                summary === "No summary yet"
+            ) {
+
+                return;
+            }
+
+
+            navigator.clipboard.writeText(summary);
+
+
+            const button =
+                document.querySelector(".copy-btn");
+
+
+            button.innerText = "✓ Copied";
+
+
+            setTimeout(() => {
+
+                button.innerText = "📋 Copy";
+
+            }, 1500);
+
+        }
+
+
+        // Clear
+
+        function clearText() {
+
+            input.value = "";
+
+            document.getElementById("fileInput").value = "";
+
+            updateWordCount();
+
+
+            document.getElementById("summary").innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">✦</div>
+
+                    <h3>No summary yet</h3>
+
+                    <p>
+                        Enter some text and click
+                        "Generate Summary".
+                    </p>
+
+                </div>
+
+            `;
+
+
+            document.getElementById("keyPoints").innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">🔑</div>
+
+                    <h3>No key points</h3>
+
+                    <p>
+                        Generate a summary to see
+                        the important points.
+                    </p>
+
+                </div>
+
+            `;
+
+
+            document.getElementById("originalWords")
+                .innerText = "0";
+
+            document.getElementById("summaryWords")
+                .innerText = "0";
+
+            document.getElementById("reduction")
+                .innerText = "0%";
+
+        }
+
+    </script>
+
+</body>
+</html>
